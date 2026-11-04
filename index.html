@@ -78,6 +78,8 @@
 
 /* Price presence filters and source details. */
 .compact-field{min-width:170px}.compact-field select{min-height:40px}.lead-checks{align-items:end;flex-wrap:wrap;gap:16px}.price-source-date,.price-row-note{display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.5}.price-row-note{max-width:310px}.lead-price-table td{vertical-align:top}@media(max-width:650px){.compact-field{flex:1;min-width:145px}.lead-checks{width:100%}}
+
+.price-scope-preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:11px;line-height:1.5;color:var(--muted);margin-top:4px}
 </style></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
 <header class="brandbar"><a href="#market" class="brand" aria-label="FIVEROX — рынок и доходы">FIVEROX <span>Санкт-Петербург и Ленинградская область</span></a><div class="header-right"><span class="open-label"><i></i>Доступ без входа</span><button class="small-button" id="downloadHtml">Скачать HTML <span aria-hidden="true">↗</span></button></div></header>
@@ -133,7 +135,7 @@ function installationPriceValue(p){if(p.priceText)return p.priceText;return (p.p
 function priceUrls(p){return [...new Set([p.source,...(p.additionalSources||[])].filter(Boolean))]}
 function priceSourceName(u){return /2gis\.ru/.test(u)?'2ГИС':/yandex\./.test(u)?'Яндекс':'Сайт компании'}
 function installationPriceText(r){return (r.installationPrices||[]).map(p=>`${p.service} · ${p.scope||'Объём уточнить'} · ${installationPriceValue(p)}${p.note?' · '+p.note:''} · ${priceUrls(p).join(', ')} · ${p.collectedAt}`).join('\n')}
-function installationPriceCell(r,i){const a=r.installationPrices||[];if(!a.length)return `<span class="muted">Цен в базе нет</span>${r.priceResearch?`<small>Проверено ${esc(r.priceResearch.checkedAt)}</small>`:''}`;return `<ul class="lead-price-preview">${a.slice(0,2).map(p=>`<li><span>${esc(p.service)}<small title="${esc(p.scope)}">${esc((p.scope||'Объём уточнить').slice(0,120))}${p.scope?.length>120?'…':''}</small></span><strong>${esc(installationPriceValue(p))}</strong></li>`).join('')}</ul><button class="detail-link" data-open="${i}" data-open-prices="true">Прайс в карточке · ${num(a.length)} поз. →</button>`}
+function installationPriceCell(r,i){const a=r.installationPrices||[];if(!a.length)return `<span class="muted">Цен в базе нет</span>${r.priceResearch?`<small>Проверено ${esc(r.priceResearch.checkedAt)}</small>`:''}`;return `<ul class="lead-price-preview">${a.slice(0,2).map(p=>`<li><span>${esc(p.service)}</span><small class="price-scope-preview" title="${esc(p.scope)}">Объём: ${esc((p.scope||'уточнить').startsWith('Источник не уточняет')?'уточнить у компании':(p.scope||'уточнить').slice(0,120))}${p.scope?.length>120&&!p.scope.startsWith('Источник не уточняет')?'…':''}</small><strong>${esc(installationPriceValue(p))}</strong></li>`).join('')}</ul><button class="detail-link" data-open="${i}" data-open-prices="true">Прайс в карточке · ${num(a.length)} поз. →</button>`}
 function installationPriceSection(r){
  const a=r.installationPrices||[],research=r.priceResearch;
  const status=a.length?num(a.length)+' поз. · собрано '+esc(a[0].collectedAt):research?'Проверено '+esc(research.checkedAt):'Прайс не добавлен';
