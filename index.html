@@ -243,7 +243,11 @@ main.addEventListener('input',e=>{const el=e.target;if(el.id==='marketQuery'){st
   state.calc=el.id==='points'?calculate(el.valueAsNumber,state.calc.margin,S.total):calculate(state.calc.points,el.valueAsNumber,S.total);
   updateCalc();
  }});
-main.addEventListener('change',e=>{const el=e.target;if(el.id==='marketTopic'||el.id==='marketGeo'){state[el.id]=el.value;state.marketPage=1;updateMarketRows()}if(leadControlKeys[el.id]&&el.id!=='leadQuery'){state.filter[leadControlKeys[el.id]]=el.type==='checkbox'?el.checked:el.value;state.page=1;updateLeads()}if(['points','margin'].includes(el.id)){document.getElementById('points').value=state.calc.points;document.getElementById('margin').value=state.calc.margin}});
+main.addEventListener('change',e=>{const el=e.target;if(el.id==='marketTopic'||el.id==='marketGeo'){state[el.id]=el.value;state.marketPage=1;updateMarketRows()}if(leadControlKeys[el.id]&&el.id!=='leadQuery'){state.filter[leadControlKeys[el.id]]=el.type==='checkbox'?el.checked:el.value;state.page=1;updateLeads()}});
+main.addEventListener('focusout',e=>{
+ const id=e.target.id;
+ if(id==='points'||id==='margin')e.target.value=state.calc[id];
+});
 document.getElementById('closeDialog').addEventListener('click',()=>document.getElementById('leadDialog').close());document.getElementById('leadDialog').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});document.querySelector('.skip').addEventListener('click',e=>{e.preventDefault();main.focus();main.scrollIntoView({block:'start'});});document.getElementById('sheetLink').href=DATA.sheetUrl;document.getElementById('checkedDate').textContent=DATA.checked;document.getElementById('downloadHtml').addEventListener('click',()=>{download('<!doctype html>\n'+document.documentElement.outerHTML,'FIVEROX_СПб_ЛО_дашборд.html','text/html;charset=utf-8');toast('HTML можно открыть без интернета')});render();
 })();
 </script><!--
